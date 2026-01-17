@@ -1,0 +1,36 @@
+TICKET 04 - Estratto conto (lettura CSV + filtri)
+
+Obiettivo
+- Aggiungere una funzionalita' "Estratto conto" che mostra le ultime N transazioni di un cliente.
+
+Contesto
+- Le transazioni vengono loggate in data/transactions.csv (se LOG_TRANSACTIONS=true).
+
+Requisiti
+1) Aggiungere una voce di menu:
+   - "6) Estratto conto (ultime N transazioni)"
+2) Chiedere:
+   - ID cliente
+   - N (numero di transazioni da mostrare, es. 10)
+3) Leggere il CSV delle transazioni e filtrare per customer_id.
+4) Stampare a video per ogni transazione:
+   - data/ora
+   - tipo
+   - importo
+
+Vincoli
+- Non introdurre database.
+- Non usare librerie esterne.
+
+Suggerimenti
+- Introduci un TransactionRepository su CSV (interfaccia + implementazione).
+- Oppure crea un metodo in CsvTransactionLogger per leggere le transazioni.
+
+Criteri di accettazione
+- Se non ci sono transazioni, viene mostrato un messaggio adeguato.
+- Le transazioni sono ordinate dalla piu' recente alla meno recente.
+
+File suggeriti
+- bin/console.php
+- src/Infrastructure/... (nuova classe repository)
+- src/Domain/Transaction.php

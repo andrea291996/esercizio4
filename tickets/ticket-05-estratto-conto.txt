@@ -1,0 +1,25 @@
+TICKET 05 - Estratto conto (lettura CSV + formattazione)
+
+Obiettivo
+- Aggiungere una funzionalita' di "estratto conto" che mostri le ultime N transazioni di un cliente.
+
+Requisiti
+1) Aggiungere una voce di menu in bin/console.php:
+   - "6) Estratto conto (ultime transazioni)"
+2) Chiedere all'utente:
+   - ID cliente
+   - numero N (es. 5)
+3) Leggere data/transactions.csv e filtrare per customer_id.
+4) Mostrare le N piu' recenti ordinate per data decrescente.
+
+Note
+- Se LOG_TRANSACTIONS=false, mostrare un messaggio e non eseguire l'operazione.
+- Per ordinare, puoi usare usort su un array di righe (o oggetti Transaction).
+
+Criteri di accettazione
+- L'output deve includere: data/ora, tipo, importo.
+- Con N=5 e 10 transazioni, ne devono essere mostrate 5.
+
+File suggeriti
+- bin/console.php
+- src/Infrastructure/CsvTransactionLogger.php (puoi creare un "reader" dedicato oppure aggiungere un metodo)

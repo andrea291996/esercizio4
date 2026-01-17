@@ -1,0 +1,25 @@
+TICKET 03 - Estratto conto (lettura CSV transazioni)
+
+Obiettivo
+- Mostrare le ultime N transazioni di un cliente (estratto conto).
+
+Requisiti
+1) Aggiungere una voce menu:
+   - 6) Estratto conto (ultime N transazioni)
+2) L'utente inserisce:
+   - ID cliente
+   - N (numero massimo di righe)
+3) Leggere data/transactions.csv e filtrare per customer_id.
+4) Stampare le ultime N transazioni in ordine temporale decrescente.
+
+Nota didattica
+- Non esiste ancora un "TransactionRepository". Puoi:
+  - implementarlo come nuova classe (consigliato)
+  - oppure leggere direttamente il CSV nel comando (meno pulito, ma accettabile)
+
+Criteri di accettazione
+- Se il logging e' disabilitato (LOG_TRANSACTIONS=false), stampare un messaggio: "Logging disabilitato".
+
+File suggeriti
+- src/Infrastructure (nuova classe)
+- bin/console.php

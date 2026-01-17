@@ -1,0 +1,37 @@
+TICKET 06 - Bonifico tra clienti (operazione composta + consistenza)
+
+Obiettivo
+- Implementare un bonifico (trasferimento) tra due clienti.
+
+Requisiti
+1) Aggiungere una voce di menu:
+   - "7) Bonifico (da un cliente a un altro)"
+2) Chiedere:
+   - ID mittente
+   - ID destinatario
+   - importo
+3) Regole:
+   - mittente e destinatario devono esistere
+   - mittente != destinatario
+   - importo > 0
+   - il mittente non può andare sotto zero
+4) Consistenza:
+   - l'operazione deve essere "tutto o niente": se qualcosa fallisce, nessun saldo deve cambiare.
+
+Suggerimento didattico
+- Implementa un nuovo metodo in BankTeller (es. transfer) che:
+   - recupera entrambi i clienti
+   - tenta il withdraw sul mittente
+   - tenta il deposit sul destinatario
+   - salva entrambi i clienti
+   - logga due transazioni (WITHDRAW e DEPOSIT) con lo stesso transfer_id (se vuoi estendere il CSV)
+
+Criteri di accettazione
+- Dopo il bonifico, i saldi risultano aggiornati correttamente.
+- In caso di errore (es. fondi insufficienti), nessun saldo viene modificato.
+
+File suggeriti
+- src/Domain/BankTeller.php
+- bin/console.php
+- src/Infrastructure/CsvCustomerRepository.php
+- data/transactions.csv (se estendi il formato)

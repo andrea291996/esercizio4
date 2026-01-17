@@ -1,0 +1,22 @@
+TICKET 05 - Refactoring: eccezioni di dominio custom
+
+Obiettivo
+- Migliorare la manutenibilita' introducendo eccezioni specifiche.
+
+Requisiti
+1) Creare una cartella:
+   - src/Domain/Exception/
+2) Creare almeno 2 eccezioni custom, ad esempio:
+   - InsufficientFundsException
+   - NegativeAmountException
+3) Aggiornare Account::deposit e Account::withdraw per lanciare queste eccezioni.
+4) Aggiornare bin/console.php per gestire i diversi casi e stampare messaggi differenti.
+
+Criteri di accettazione
+- Il codice deve compilare e funzionare come prima.
+- Le eccezioni custom devono essere usate davvero (non solo create).
+
+File suggeriti
+- src/Domain/Account.php
+- bin/console.php
+- src/Domain/Exception/*

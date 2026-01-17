@@ -1,0 +1,24 @@
+TICKET 06 - Qualita': script di test manuale e pulizia del codice
+
+Obiettivo
+- Consolidare quanto fatto e migliorare la leggibilita'.
+
+Requisiti
+1) Aggiungere un file:
+   - docs/test-manuale.md
+   con una lista di "casi di test" ripetibili (passi + output atteso).
+2) Fare un piccolo refactoring a scelta, ad esempio:
+   - estrarre in funzioni la gestione menu in bin/console.php
+   - ridurre duplicazioni tra deposito e prelievo
+   - migliorare nomi variabili e commenti
+3) Aggiungere una sezione al README:
+   - "Come contribuire" (branching, commit, PR)
+
+Criteri di accettazione
+- Il progetto resta eseguibile.
+- docs/test-manuale.md e' chiaro e riproducibile.
+
+File suggeriti
+- bin/console.php
+- README.md
+- docs/test-manuale.md (nuovo)

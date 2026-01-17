@@ -1,0 +1,28 @@
+TICKET 03 - Limiti operativi configurabili via .env (config + eccezioni)
+
+Obiettivo
+- Introdurre limiti min/max per deposito e prelievo, configurabili tramite .env.
+
+Requisiti
+1) Aggiungere a .env/.env.example le chiavi:
+   - MIN_DEPOSIT_CENTS (default: 1)
+   - MAX_DEPOSIT_CENTS (default: 10000000)    # 100.000,00
+   - MIN_WITHDRAW_CENTS (default: 1)
+   - MAX_WITHDRAW_CENTS (default: 5000000)    # 50.000,00
+2) Applicare le regole in BankTeller:
+   - Se l'importo e' fuori range, lancia RuntimeException con messaggio chiaro.
+3) Aggiornare bin/console.php per leggere le nuove variabili e passarle al BankTeller.
+
+Suggerimenti
+- Per non "sporcare" BankTeller, puoi introdurre una piccola classe Config (value object).
+- In alternativa, aggiungi proprieta' private in BankTeller.
+
+Criteri di accettazione
+- Un deposito troppo piccolo/grande viene rifiutato.
+- Un prelievo troppo piccolo/grande viene rifiutato.
+- I limiti funzionano cambiando solo il file .env.
+
+File suggeriti
+- bin/console.php
+- src/Domain/BankTeller.php
+- .env / .env.example

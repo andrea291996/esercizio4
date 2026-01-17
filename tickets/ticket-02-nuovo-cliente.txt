@@ -1,0 +1,30 @@
+TICKET 02 - Creazione nuovo cliente (OOP + CSV)
+
+Obiettivo
+- Aggiungere la possibilita' di creare un nuovo cliente da menu.
+
+Contesto
+- I clienti sono attualmente inseriti a mano nel file data/customers.csv.
+
+Requisiti
+1) Aggiungere una voce di menu in bin/console.php:
+   - "5) Crea nuovo cliente"
+2) L'operazione deve chiedere:
+   - Nome cliente
+   - Saldo iniziale (importo)
+3) L'ID deve essere generato automaticamente:
+   - Strategia semplice: massimo ID esistente + 1
+4) Salvare il cliente tramite repository (CsvCustomerRepository::save).
+
+Suggerimenti
+- Potrebbe essere utile creare un metodo nel repository per ottenere il prossimo ID.
+- In alternativa, calcola il prossimo ID nel menu leggendo l'elenco clienti.
+
+Criteri di accettazione
+- Dopo la creazione, il cliente appare in "Elenca clienti".
+- Il CSV viene aggiornato correttamente.
+
+File suggeriti
+- bin/console.php
+- src/Infrastructure/CsvCustomerRepository.php
+- src/Infrastructure/CustomerRepository.php (se aggiungi un nuovo metodo)

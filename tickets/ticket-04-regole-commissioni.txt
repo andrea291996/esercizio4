@@ -1,0 +1,23 @@
+TICKET 04 - Regole di business: commissione su prelievi
+
+Obiettivo
+- Introdurre una regola di business leggermente piu' articolata.
+
+Requisiti
+1) Aggiungere nel .env una nuova variabile:
+   - WITHDRAW_FEE_CENTS (es. 50 => 0,50 EUR)
+2) Quando si fa un prelievo, la commissione viene scalata dal conto insieme all'importo.
+   - esempio: saldo 100.00, prelievo 10.00, fee 0.50 => nuovo saldo 89.50
+3) Il messaggio in console deve mostrare importo, fee e saldo finale.
+
+Criteri di accettazione
+- Se i fondi non bastano a coprire importo + fee, l'operazione deve fallire (come oggi).
+- La fee deve essere loggata come parte della transazione (scegli una soluzione):
+  - Opzione A: logghi una singola transazione con amount = importo + fee
+  - Opzione B: logghi due righe (WITHDRAW e FEE)
+
+File suggeriti
+- bin/console.php
+- src/Domain/BankTeller.php
+- src/Domain/Transaction.php (se aggiungi nuovi tipi)
+- .env.example

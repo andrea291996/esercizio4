@@ -1,0 +1,28 @@
+TICKET 03 - Limite di prelievo giornaliero (config + lettura log)
+
+Obiettivo
+- Introdurre un limite massimo di prelievo giornaliero per cliente.
+
+Requisiti
+1) Aggiungere una variabile in .env / .env.example:
+   - DAILY_WITHDRAW_LIMIT_CENTS=50000  (esempio: 500,00)
+2) Quando l'utente fa un prelievo, il sistema deve verificare che:
+   somma_prelevata_oggi + importo_richiesto <= limite_giornaliero
+3) Se LOG_TRANSACTIONS=false, il limite non deve essere applicato (manca lo storico).
+
+Note
+- "Oggi" si intende la data locale (YYYY-MM-DD) del momento dell'operazione.
+- Per calcolare somma_prelevata_oggi puoi leggere data/transactions.csv e filtrare:
+   - customer_id
+   - type = WITHDRAW
+   - at_iso con stessa data
+
+Criteri di accettazione
+- Se il limite viene superato, l'operazione fallisce con messaggio chiaro.
+- Se l'operazione e' valida, il saldo viene aggiornato e la transazione viene loggata.
+
+File suggeriti
+- bin/console.php (lettura config)
+- src/Domain/BankTeller.php (regola applicativa)
+- src/Infrastructure/CsvTransactionLogger.php (potresti aggiungere un metodo di lettura)
+- src/Infrastructure/TransactionLogger.php (se scegli di estendere l'interfaccia)

@@ -1,0 +1,23 @@
+TICKET 01 - Validazione importi (base)
+
+Obiettivo
+- Migliorare la validazione dell'importo inserito dall'utente.
+
+Contesto
+- Attualmente Money::fromUserInput(...) e' permissivo e, in caso di input strano, torna 0.
+- Vogliamo che l'applicazione informi l'utente in modo chiaro quando l'importo non e' valido.
+
+Requisiti
+1) Modificare Money::fromUserInput(...) in modo che:
+   - se l'importo non e' valido, lanci InvalidArgumentException
+   - accetti input come: "10", "10.5", "10.50", "0", "0.01"
+   - rifiuti input come: "-1", "10..2", "abc", "10,2,3"
+2) In bin/console.php, intercettare l'eccezione e stampare un messaggio user-friendly.
+
+Criteri di accettazione
+- Inserendo un importo non valido, l'operazione non viene eseguita e il saldo non cambia.
+- Il messaggio di errore deve essere comprensibile.
+
+File suggeriti
+- src/Domain/Money.php
+- bin/console.php

@@ -1,0 +1,24 @@
+TICKET 05 - Refactoring: separare la logica del menu (clean code)
+
+Obiettivo
+- Migliorare la manutenibilita' spostando la logica del menu fuori da bin/console.php.
+
+Contesto
+- Attualmente bin/console.php contiene sia bootstrap che tutta la logica del menu.
+
+Requisiti
+1) Creare una classe App\Support\Menu (o nome simile) che:
+   - riceve BankTeller e ConsoleIO (o usa ConsoleIO static)
+   - espone un metodo run() che esegue il loop del menu
+2) bin/console.php deve contenere solo:
+   - bootstrap (.env + autoload)
+   - costruzione dipendenze
+   - avvio del menu (Menu->run())
+
+Criteri di accettazione
+- Il comportamento esterno dell'app non cambia.
+- Il file bin/console.php diventa significativamente piu' corto e leggibile.
+
+File suggeriti
+- bin/console.php
+- src/Support/Menu.php (nuovo)

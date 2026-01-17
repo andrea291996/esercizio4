@@ -1,0 +1,35 @@
+TICKET 06 - Trasferimento tra clienti (use case completo)
+
+Obiettivo
+- Implementare un nuovo caso d'uso: trasferire denaro da un cliente a un altro.
+
+Requisiti
+1) Aggiungere una voce di menu:
+   - "7) Trasferisci (da cliente A a cliente B)"
+2) Input richiesti:
+   - ID cliente sorgente
+   - ID cliente destinazione
+   - importo
+3) Regole:
+   - sorgente e destinazione devono esistere
+   - sorgente e destinazione non possono essere lo stesso cliente
+   - il sorgente non puo' andare sotto zero
+4) Persistenza:
+   - aggiornare entrambi i saldi nel CSV
+5) Logging:
+   - se LOG_TRANSACTIONS=true, loggare 2 transazioni:
+     - WITHDRAW per il sorgente
+     - DEPOSIT per il destinatario
+
+Suggerimenti
+- Implementare un metodo BankTeller::transfer(int $fromId, int $toId, Money $amount)
+- Assicurarsi che il salvataggio dei due clienti avvenga in modo coerente.
+
+Criteri di accettazione
+- Dopo un trasferimento valido, i due saldi risultano corretti.
+- In caso di errore (cliente inesistente, fondi insufficienti, stessi ID), nessun saldo deve cambiare.
+
+File suggeriti
+- src/Domain/BankTeller.php
+- bin/console.php (o Menu, se fatto ticket 05)
+- src/Infrastructure/CsvCustomerRepository.php

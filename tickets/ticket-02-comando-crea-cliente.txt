@@ -1,0 +1,22 @@
+TICKET 02 - Comando "Crea cliente" (array/CSV)
+
+Obiettivo
+- Aggiungere dal menu la possibilita' di creare un nuovo cliente.
+
+Requisiti
+1) Nel menu CLI aggiungere una voce:
+   - 5) Crea nuovo cliente
+2) Quando selezionata:
+   - chiedere nome cliente
+   - chiedere saldo iniziale (usa Money)
+   - generare un nuovo ID (intero) non usato, prendendo il massimo ID nel CSV e aggiungendo 1
+   - salvare il nuovo cliente in data/customers.csv tramite il repository
+3) Stampare conferma con ID e saldo.
+
+Criteri di accettazione
+- Dopo la creazione, il cliente appare nell'elenco.
+- Il CSV rimane valido e con header.
+
+File suggeriti
+- src/Infrastructure/CsvCustomerRepository.php
+- bin/console.php

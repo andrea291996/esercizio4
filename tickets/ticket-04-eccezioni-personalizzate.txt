@@ -1,0 +1,25 @@
+TICKET 04 - Eccezioni di dominio personalizzate (namespace + gerarchie)
+
+Obiettivo
+- Sostituire le eccezioni generiche (RuntimeException/InvalidArgumentException) con eccezioni di dominio dedicate.
+
+Requisiti
+1) Creare una cartella e namespace per le eccezioni di dominio:
+   - src/Domain/Exception/
+2) Creare almeno queste classi:
+   - DomainException (classe base, estende \Exception)
+   - InsufficientFundsException
+   - NegativeAmountException
+   - CustomerNotFoundException
+3) Modificare Account e BankTeller per lanciare le nuove eccezioni.
+4) In bin/console.php, gestire gli errori con catch piu' specifici (uno per tipo), mostrando messaggi differenti.
+
+Criteri di accettazione
+- Le eccezioni standard non devono piu' essere usate per i casi previsti sopra.
+- I messaggi a video devono essere piu' chiari (es. "Saldo insufficiente" vs "Errore generico").
+
+File suggeriti
+- src/Domain/Account.php
+- src/Domain/BankTeller.php
+- bin/console.php
+- src/Domain/Exception/*.php
