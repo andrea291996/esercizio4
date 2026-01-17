@@ -45,11 +45,19 @@ final class Money
         // Normalizziamo la virgola in punto.
         $amount = str_replace(',', '.', $amount);
 
+        // Regex per validazione dell'importo: numeri+virgola+numeri
+        $regex = "/^[0-9]+(\.[0-9]{0,2})?$/";
+        if (!preg_match($regex, $amount)) {
+            throw new \InvalidArgumentException("L'importo deve essere un numero maggiore o uguale a zero, intero o con un al massimo due cifre decimali\n");
+            return new self(0);
+        }
+
         // Split sulla parte decimale.
         $parts = explode('.', $amount, 2);
         $eurosPart = $parts[0];
         $centsPart = $parts[1] ?? '0';
 
+        /*
         // Validazione base: solo cifre.
         if ($eurosPart === '' || !ctype_digit(ltrim($eurosPart, '0')) && $eurosPart !== '0') {
             // In caso di input strano, torniamo 0 per non rompere l'esercizio.
@@ -58,6 +66,7 @@ final class Money
         if ($centsPart !== '' && !ctype_digit($centsPart)) {
             return new self(0);
         }
+        */
 
         $euros = (int)$eurosPart;
         $centsPart = substr(str_pad($centsPart, 2, '0'), 0, 2);

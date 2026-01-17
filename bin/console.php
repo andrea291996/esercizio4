@@ -87,10 +87,14 @@ while (true) {
             case '3':
                 $id = ConsoleIO::readNonNegativeInt('Inserisci ID cliente: ');
                 $raw = ConsoleIO::readLine('Importo da depositare (es. 10.50): ');
+                try{
                 $amount = Money::fromUserInput($raw);
                 $newBalance = $bankTeller->deposit($id, $amount);
                 ConsoleIO::println('Deposito effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
                 break;
+                }catch(\Exception $e){
+                    echo $e->getMessage();
+                }
 
             case '4':
                 $id = ConsoleIO::readNonNegativeInt('Inserisci ID cliente: ');
