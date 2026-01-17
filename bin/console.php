@@ -53,6 +53,7 @@ while (true) {
     ConsoleIO::println('  2) Mostra saldo cliente');
     ConsoleIO::println('  3) Deposita');
     ConsoleIO::println('  4) Preleva');
+    ConsoleIO::println('  5) Crea nuovo cliente');
     ConsoleIO::println('  0) Esci');
 
     $choice = ConsoleIO::readLine('Scelta: ');
@@ -98,6 +99,12 @@ while (true) {
                 $amount = Money::fromUserInput($raw);
                 $newBalance = $bankTeller->withdraw($id, $amount);
                 ConsoleIO::println('Prelievo effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
+                break;
+            
+            case '5':
+                $nome = ConsoleIO::readLine('Inserisci il tuo nome e cognome (es. Mario Rossi): ');
+                $saldo = ConsoleIO::readLine('Inserisci il tuo saldo iniziale: ');
+                $nuovoCliente = $customerRepo->create($nome, $saldo);
                 break;
 
             case '0':
