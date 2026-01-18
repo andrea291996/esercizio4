@@ -92,9 +92,8 @@ final class CsvCustomerRepository implements CustomerRepository
         $this->writeRows($rows);
     }
 
-    public function create(String $nome, String $saldo) : Customer
+    public function create(String $nome, Money $saldo) : Customer
     {
-        $saldoIniziale = Money::fromUserInput($saldo);
         $clienti = $this->findAll();
         $idClienti = [];
             foreach($clienti as $cliente){
@@ -103,7 +102,7 @@ final class CsvCustomerRepository implements CustomerRepository
             }
         $idMax = max($idClienti);
         $idNuovo = $idMax + 1;
-        $nuovoAccount = new Account((string)$idNuovo, $saldoIniziale);
+        $nuovoAccount = new Account((string)$idNuovo, $saldo);
         $nuovoCliente = new Customer((int)$idNuovo, $nome, $nuovoAccount);
         $this->save($nuovoCliente);
         return $nuovoCliente;

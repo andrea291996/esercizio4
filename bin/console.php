@@ -103,8 +103,10 @@ while (true) {
             
             case '5':
                 $nome = ConsoleIO::readLine('Inserisci il tuo nome e cognome (es. Mario Rossi): ');
-                $saldo = ConsoleIO::readLine('Inserisci il tuo saldo iniziale: ');
+                $saldoRaw = ConsoleIO::readLine('Inserisci il tuo saldo iniziale: ');
+                $saldo = Money::fromUserInput($saldoRaw);
                 $nuovoCliente = $customerRepo->create($nome, $saldo);
+                ConsoleIo::println('Nuovo account creato. Nome: '.$nuovoCliente->name().'Saldo: '.$bankTeller->formatMoney($saldo));
                 break;
 
             case '0':
