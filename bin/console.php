@@ -32,8 +32,8 @@ $dataDir = $_ENV['DATA_DIR'] ?? ($projectRoot . '/data');
 $currency = $_ENV['CURRENCY'] ?? 'EUR';
 $logTransactions = strtolower((string)($_ENV['LOG_TRANSACTIONS'] ?? 'true')) === 'true';
 
-$customersCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'customers.csv';
-$transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'transactions.csv';
+$customersCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'customers_example.csv';
+$transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'transactions_example.csv';
 
 // 3) Costruzione delle dipendenze
 $customerRepo = new CsvCustomerRepository($customersCsv);
