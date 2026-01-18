@@ -106,7 +106,7 @@ while (true) {
                 $saldoRaw = ConsoleIO::readLine('Inserisci il tuo saldo iniziale: ');
                 $saldo = Money::fromUserInput($saldoRaw);
                 $nuovoCliente = $customerRepo->create($nome, $saldo);
-                ConsoleIo::println('Nuovo account creato. Nome: '.$nuovoCliente->name().' Saldo: '.$bankTeller->formatMoney($saldo));
+                ConsoleIo::println('Nuovo account creato. Id: '.$nuovoCliente->id().' Saldo: '.$bankTeller->formatMoney($saldo));
                 break;
 
             case '0':
