@@ -29,9 +29,6 @@ final class TransactionRepository
     }
 
     public function getTransactionsByCustomerId($customerId){
-        if (!$this->logTransactions) {
-            throw new \LogicException("Logging disabilitato\n");
-        }
         $rows = $this->readRows();
         $transactions = [];
         foreach ($rows as $row) {
@@ -43,6 +40,9 @@ final class TransactionRepository
     }
 
     public function getLastNTransactions($n, $id){
+        if (!$this->logTransactions) {
+            throw new \LogicException("Logging disabilitato\n");
+        }
         $transactions = $this->getTransactionsByCustomerId($id);
         $transactions = array_slice($transactions, -$n);
         $transactions = array_reverse($transactions);
