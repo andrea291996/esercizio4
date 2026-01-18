@@ -61,6 +61,7 @@ final class Account
             throw new \RuntimeException('Fondi insufficienti.');
         }
 
+        
         $this->balance = $this->balance->subtract($amount);
     }
 }

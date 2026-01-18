@@ -32,6 +32,7 @@ EnvLoader::load($projectRoot . '/.env');
 $dataDir = $_ENV['DATA_DIR'] ?? ($projectRoot . '/data');
 $currency = $_ENV['CURRENCY'] ?? 'EUR';
 $logTransactions = strtolower((string)($_ENV['LOG_TRANSACTIONS'] ?? 'true')) === 'true';
+$limitePrelievoGiornaliero = $_ENV['DAILY_WITHDRAW_LIMIT_CENTS'];
 
 $customersCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'customers_example.csv';
 $transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'transactions_example.csv';
@@ -91,9 +92,9 @@ while (true) {
                 $id = ConsoleIO::readNonNegativeInt('Inserisci ID cliente: ');
                 $raw = ConsoleIO::readLine('Importo da depositare (es. 10.50): ');
                 try{
-                $amount = Money::fromUserInput($raw);
-                $newBalance = $bankTeller->deposit($id, $amount);
-                ConsoleIO::println('Deposito effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
+                    $amount = Money::fromUserInput($raw);
+                    $newBalance = $bankTeller->deposit($id, $amount);
+                    ConsoleIO::println('Deposito effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
                 }catch(\Exception $e){
                     echo $e->getMessage();
                 }
@@ -102,9 +103,14 @@ while (true) {
             case '4':
                 $id = ConsoleIO::readNonNegativeInt('Inserisci ID cliente: ');
                 $raw = ConsoleIO::readLine('Importo da prelevare (es. 10.50): ');
-                $amount = Money::fromUserInput($raw);
-                $newBalance = $bankTeller->withdraw($id, $amount);
-                ConsoleIO::println('Prelievo effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
+                try{
+                    $amount = Money::fromUserInput($raw);
+                    $newBalance = $bankTeller->withdraw($id, $amount, $limitePrelievoGiornaliero, $logTransactions, $transactionRepo);
+                    ConsoleIO::println('Prelievo effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
+                }
+                catch(\Exception$e){
+                    echo $e->getMessage();
+                }
                 break;
             
             case '5':

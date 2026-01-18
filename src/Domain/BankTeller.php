@@ -18,6 +18,7 @@ namespace App\Domain;
 
 use App\Infrastructure\CustomerRepository;
 use App\Infrastructure\TransactionLogger;
+use App\Infrastructure\TransactionRepository;
 
 final class BankTeller
 {
@@ -68,14 +69,24 @@ final class BankTeller
     /**
      * Ritiro.
      */
-    public function withdraw(int $customerId, Money $amount): Money
+    public function withdraw(int $customerId, Money $amount, $limitePrelievoGiornaliero, $logTransactions, $transactionRepo): Money
     {
         $customer = $this->requireCustomer($customerId);
-        $customer->account()->withdraw($amount);
+        $transazioniDiCustomer = $transactionRepo->getTransactionsByCustomerId($customerId);
+        $transazioniDiOggi = [];
+        $oggi = new \DateTimeImmutable('now');
+        foreach($transazioniDiCustomer as $transazione){
+            if(($transazione->at()->format('Y-m-d') === $oggi->format('Y-m-d')) && $transazione->type() === "WITHDRAW"){
+                $transazioniDiOggi[] = $transazione->amount()->cents();
+            }
+        }
+        $totalePreleviOggi = array_sum($transazioniDiOggi);
+        if($totalePreleviOggi + $amount->cents() <= $limitePrelievoGiornaliero){
+            $customer->account()->withdraw($amount);
 
-        $this->customers->save($customer);
+            $this->customers->save($customer);
 
-        $this->logger->log(new Transaction(
+            $this->logger->log(new Transaction(
             $this->newTransactionId(),
             $customerId,
             Transaction::TYPE_WITHDRAW,
@@ -84,6 +95,9 @@ final class BankTeller
         ));
 
         return $customer->account()->balance();
+        }else{
+            throw New \InvalidArgumentException("Hai superato il limite giornaliero di prevlievo.");
+        }
     }
 
     public function formatMoney(Money $money): string
