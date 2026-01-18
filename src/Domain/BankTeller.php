@@ -81,7 +81,10 @@ final class BankTeller
             }
         }
         $totalePreleviOggi = array_sum($transazioniDiOggi);
-        if($totalePreleviOggi + $amount->cents() <= $limitePrelievoGiornaliero || $logTransactions==false){
+        $totale = $totalePreleviOggi + $amount->cents();
+        //echo "limite:" .$limitePrelievoGiornaliero;
+        //echo "\nprelievo: ".$totale;
+        if($totalePreleviOggi + $amount->cents() <= $limitePrelievoGiornaliero || !$logTransactions){
             $customer->account()->withdraw($amount);
 
             $this->customers->save($customer);
