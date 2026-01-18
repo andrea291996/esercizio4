@@ -119,8 +119,7 @@ while (true) {
                 $id = ConsoleIO::readNonNegativeInt('Inserisci ID cliente: ');
                 $n = ConsoleIO::readNonNegativeInt('Quante transazioni vuoi vedere? ');
                 try{
-                    $transactions = $transactionRepo->getLastNTransactionsByCustomerId($id, $n);
-                    $transactions = array_reverse($transactions);
+                    $transactions = $transactionRepo->getLastNTransactions($n, $id);
                     foreach($transactions as $transaction){
                         $type = $transaction->type();
                         $amount = $transaction->amount();

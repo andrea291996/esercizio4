@@ -28,7 +28,7 @@ final class TransactionRepository
         }
     }
 
-    function getLastNTransactionsByCustomerId($customerId, $n){
+    public function getTransactionsByCustomerId($customerId){
         if (!$this->logTransactions) {
             throw new \LogicException("Logging disabilitato\n");
         }
@@ -39,7 +39,13 @@ final class TransactionRepository
                 $transactions[] = $this->rowToTransactions($row, $customerId);
             }
         }
+        return $transactions;
+    }
+
+    public function getLastNTransactions($n, $id){
+        $transactions = $this->getTransactionsByCustomerId($id);
         $transactions = array_slice($transactions, -$n);
+        $transactions = array_reverse($transactions);
         return $transactions;
     }
 
