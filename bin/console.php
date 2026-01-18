@@ -32,8 +32,8 @@ $dataDir = $_ENV['DATA_DIR'] ?? ($projectRoot . '/data');
 $currency = $_ENV['CURRENCY'] ?? 'EUR';
 $logTransactions = strtolower((string)($_ENV['LOG_TRANSACTIONS'] ?? 'true')) === 'true';
 
-$customersCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'customers.csv';
-$transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'transactions.csv';
+$customersCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'customers_example.csv';
+$transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'transactions_example.csv';
 
 // 3) Costruzione delle dipendenze
 $customerRepo = new CsvCustomerRepository($customersCsv);
@@ -53,6 +53,7 @@ while (true) {
     ConsoleIO::println('  2) Mostra saldo cliente');
     ConsoleIO::println('  3) Deposita');
     ConsoleIO::println('  4) Preleva');
+    ConsoleIO::println('  5) Crea nuovo cliente');
     ConsoleIO::println('  0) Esci');
 
     $choice = ConsoleIO::readLine('Scelta: ');
@@ -102,6 +103,14 @@ while (true) {
                 $amount = Money::fromUserInput($raw);
                 $newBalance = $bankTeller->withdraw($id, $amount);
                 ConsoleIO::println('Prelievo effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
+                break;
+            
+            case '5':
+                $nome = ConsoleIO::readLine('Inserisci il tuo nome e cognome (es. Mario Rossi): ');
+                $saldoRaw = ConsoleIO::readLine('Inserisci il tuo saldo iniziale: ');
+                $saldo = Money::fromUserInput($saldoRaw);
+                $nuovoCliente = $customerRepo->create($nome, $saldo);
+                ConsoleIo::println('Nuovo account creato. Id: '.$nuovoCliente->id().' Saldo: '.$bankTeller->formatMoney($saldo));
                 break;
 
             case '0':

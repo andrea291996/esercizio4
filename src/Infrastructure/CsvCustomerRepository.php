@@ -92,6 +92,21 @@ final class CsvCustomerRepository implements CustomerRepository
         $this->writeRows($rows);
     }
 
+    public function create(String $nome, Money $saldo) : Customer
+    {
+        $clienti = $this->findAll();
+        $idClienti = [];
+            foreach($clienti as $cliente){
+                $id = $cliente->id();
+                $idClienti[] = $id;
+            }
+        $idMax = max($idClienti);
+        $idNuovo = $idMax + 1;
+        $nuovoAccount = new Account((string)$idNuovo, $saldo);
+        $nuovoCliente = new Customer((int)$idNuovo, $nome, $nuovoAccount);
+        $this->save($nuovoCliente);
+        return $nuovoCliente;
+    }
     /**
      * Legge tutte le righe dati (escluso l'header) e le restituisce come array associativo.
      *
