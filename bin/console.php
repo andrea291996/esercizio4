@@ -16,6 +16,7 @@ use App\Domain\Money;
 use App\Infrastructure\CsvCustomerRepository;
 use App\Infrastructure\CsvTransactionLogger;
 use App\Infrastructure\NullTransactionLogger;
+use App\Infrastructure\TransactionRepository;
 use App\Support\Autoloader;
 use App\Support\ConsoleIO;
 use App\Support\EnvLoader;
@@ -38,7 +39,7 @@ $transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 
 // 3) Costruzione delle dipendenze
 $customerRepo = new CsvCustomerRepository($customersCsv);
 $logger = $logTransactions ? new CsvTransactionLogger($transactionsCsv) : new NullTransactionLogger();
-
+$transactionRepo= new TransactionRepository($transactionsCsv, $logTransactions);
 $bankTeller = new BankTeller($customerRepo, $logger, $currency);
 
 // 4) Menu principale
@@ -54,6 +55,7 @@ while (true) {
     ConsoleIO::println('  3) Deposita');
     ConsoleIO::println('  4) Preleva');
     ConsoleIO::println('  5) Crea nuovo cliente');
+    ConsoleIO::println('  6) Estratto conto (ultime N transazioni)');
     ConsoleIO::println('  0) Esci');
 
     $choice = ConsoleIO::readLine('Scelta: ');
@@ -92,10 +94,10 @@ while (true) {
                 $amount = Money::fromUserInput($raw);
                 $newBalance = $bankTeller->deposit($id, $amount);
                 ConsoleIO::println('Deposito effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
-                break;
                 }catch(\Exception $e){
                     echo $e->getMessage();
                 }
+                break;
 
             case '4':
                 $id = ConsoleIO::readNonNegativeInt('Inserisci ID cliente: ');
@@ -110,7 +112,25 @@ while (true) {
                 $saldoRaw = ConsoleIO::readLine('Inserisci il tuo saldo iniziale: ');
                 $saldo = Money::fromUserInput($saldoRaw);
                 $nuovoCliente = $customerRepo->create($nome, $saldo);
-                ConsoleIo::println('Nuovo account creato. Id: '.$nuovoCliente->id().' Saldo: '.$bankTeller->formatMoney($saldo));
+                ConsoleIO::println('Nuovo account creato. Id: '.$nuovoCliente->id().' Saldo: '.$bankTeller->formatMoney($saldo));
+                break;
+            
+            case '6':
+                $id = ConsoleIO::readNonNegativeInt('Inserisci ID cliente: ');
+                $n = ConsoleIO::readNonNegativeInt('Quante transazioni vuoi vedere? ');
+                try{
+                    $transactions = $transactionRepo->getLastNTransactionsByCustomerId($id, $n);
+                    $transactions = array_reverse($transactions);
+                    foreach($transactions as $transaction){
+                        $type = $transaction->type();
+                        $amount = $transaction->amount();
+                        $amount1 = $bankTeller->formatMoney($amount);
+                        ConsoleIO::println("Tipo: ".$type." Quantità: ".$amount1);
+                    }
+                }
+                catch(\Exception $e){
+                    echo $e->getMessage();
+                }
                 break;
 
             case '0':
