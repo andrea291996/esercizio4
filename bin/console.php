@@ -32,7 +32,13 @@ EnvLoader::load($projectRoot . '/.env');
 $dataDir = $_ENV['DATA_DIR'] ?? ($projectRoot . '/data');
 $currency = $_ENV['CURRENCY'] ?? 'EUR';
 $logTransactions = strtolower((string)($_ENV['LOG_TRANSACTIONS'] ?? 'true')) === 'true';
+//$minimoDeposito =
+//$massimoDeposito =
 $limitePrelievoGiornaliero = $_ENV['DAILY_WITHDRAW_LIMIT_CENTS'];
+//$minimoPrelievo =
+//$massimoPrelievo =
+
+//$config = new Config($currency, $logTransactions, $minimoDeposito, $massimoDeposito, $limitePrelievoGiornaliero, $minimoPrelievo, $massimoPrelievo);
 
 $customersCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'customers_example.csv';
 $transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'transactions_example.csv';
