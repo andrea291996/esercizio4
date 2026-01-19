@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use App\Domain\BankTeller;
 use App\Domain\Money;
+use App\Domain\Config;
 use App\Infrastructure\CsvCustomerRepository;
 use App\Infrastructure\CsvTransactionLogger;
 use App\Infrastructure\NullTransactionLogger;
@@ -32,13 +33,13 @@ EnvLoader::load($projectRoot . '/.env');
 $dataDir = $_ENV['DATA_DIR'] ?? ($projectRoot . '/data');
 $currency = $_ENV['CURRENCY'] ?? 'EUR';
 $logTransactions = strtolower((string)($_ENV['LOG_TRANSACTIONS'] ?? 'true')) === 'true';
-//$minimoDeposito =
-//$massimoDeposito =
+$minimoDeposito = $_ENV['MIN_DEPOSIT_CENTS'];
+$massimoDeposito = $_ENV['MAX_DEPOSIT_CENTS'];
 $limitePrelievoGiornaliero = $_ENV['DAILY_WITHDRAW_LIMIT_CENTS'];
-//$minimoPrelievo =
-//$massimoPrelievo =
+$minimoPrelievo = $_ENV['MIN_WITHDRAW_CENTS'];
+$massimoPrelievo = $_ENV['MAX_WITHDRAW_CENTS'];
 
-//$config = new Config($currency, $logTransactions, $minimoDeposito, $massimoDeposito, $limitePrelievoGiornaliero, $minimoPrelievo, $massimoPrelievo);
+$config = new Config($currency, $logTransactions, $minimoDeposito, $massimoDeposito, $limitePrelievoGiornaliero, $minimoPrelievo, $massimoPrelievo);
 
 $customersCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'customers_example.csv';
 $transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'transactions_example.csv';
@@ -47,7 +48,7 @@ $transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 
 $customerRepo = new CsvCustomerRepository($customersCsv);
 $logger = $logTransactions ? new CsvTransactionLogger($transactionsCsv) : new NullTransactionLogger();
 $transactionRepo= new TransactionRepository($transactionsCsv, $logTransactions);
-$bankTeller = new BankTeller($customerRepo, $logger, $currency);
+$bankTeller = new BankTeller($customerRepo, $logger, $currency, $config);
 
 // 4) Menu principale
 ConsoleIO::println('========================================');
@@ -111,7 +112,7 @@ while (true) {
                 $raw = ConsoleIO::readLine('Importo da prelevare (es. 10.50): ');
                 try{
                     $amount = Money::fromUserInput($raw);
-                    $newBalance = $bankTeller->withdraw($id, $amount, $limitePrelievoGiornaliero, $logTransactions, $transactionRepo);
+                    $newBalance = $bankTeller->withdraw($id, $amount, $logTransactions, $transactionRepo);
                     ConsoleIO::println('Prelievo effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
                 }
                 catch(\Exception$e){
