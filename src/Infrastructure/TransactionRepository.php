@@ -46,6 +46,9 @@ final class TransactionRepository
         $transactions = $this->getTransactionsByCustomerId($id);
         $transactions = array_slice($transactions, -$n);
         $transactions = array_reverse($transactions);
+        if(empty($transactios)){
+            throw new \RuntimeException('Nessuna transazione effettuata');
+        }
         return $transactions;
     }
 

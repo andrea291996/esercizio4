@@ -145,9 +145,17 @@ final class BankTeller
         if ($destinatario == $mittente) {
             throw new \RuntimeException('Mittente e Destinatario non possono coincidere');
         }
-        $mittente->account()->withdraw($importo);
+
+        $commissioneInt = $this->config->getCommissione();
+        $commissione = Money::fromCents($commissioneInt);
+        $importoConCommissione = $importo->add($commissione);
+
+
+        //ho aggiunto la commissione solo su chi invia denaro cosi per divertimento
+        $mittente->account()->withdraw($importoConCommissione);
         $destinatario->account()->deposit($importo);
         $transactionId = $this->newTransactionId();
+
         $this->customers->save($mittente);
             $this->logger->log(new Transaction(
             $transactionId,
