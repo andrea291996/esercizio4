@@ -24,10 +24,31 @@ class Config {
     }
 
     public function getLimitePrelievoGiornaliero(){
-        return $this->limitePrelievoGiornaliero;
+        $limitePrelievoGiornaliero = $this->limitePrelievoGiornaliero;
+        return (int)$limitePrelievoGiornaliero;
     }
 
     public function getLogTransactions(){
         return $this->logTransactions;
+    }
+
+    public function getMinimoDeposito(){
+        $minimoDeposito = $this->minimoDeposito;
+        return (int)$minimoDeposito;
+    }
+
+    public function getMassimoDeposito(){
+        $massimoDeposito = $this->massimoDeposito;
+        return (int)$massimoDeposito;
+    }
+
+    public function getMassimoPrelievo(){
+        $massimoPrelievo = $this->massimoPrelievo;
+        return (int)$massimoPrelievo;
+    }
+
+    public function getMinimoPrelievo(){
+        $minimoPrelievo = $this->minimoPrelievo;
+        return (int)$minimoPrelievo;
     }
 }

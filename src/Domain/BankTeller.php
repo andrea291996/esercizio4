@@ -51,6 +51,15 @@ final class BankTeller
     public function deposit(int $customerId, Money $amount): Money
     {
         $customer = $this->requireCustomer($customerId);
+        $minimoDeposito = $this->config->getMinimoDeposito();
+        $massimoDeposito = $this->config->getMassimoDeposito();
+        $amountCents = $amount->cents();
+        if($amountCents > $massimoDeposito){
+            throw new \RuntimeException("Hai superato il limite massimo di deposito!");
+        }
+        if($amountCents < $minimoDeposito){
+            throw new \RuntimeException("Non hai superato il limite minimo di deposito!");
+        }
         $customer->account()->deposit($amount);
 
         // Persistiamo il nuovo saldo sul CSV.
@@ -82,17 +91,27 @@ final class BankTeller
                 $transazioniDiOggi[] = $transazione->amount()->cents();
             }
         }
+        $amountCents = $amount->cents();
         $totalePreleviOggi = array_sum($transazioniDiOggi);
-        $totale = $totalePreleviOggi + $amount->cents();
+        $totale = $totalePreleviOggi + $amountCents;
         //echo "limite:" .$limitePrelievoGiornaliero;
         //echo "\nprelievo: ".$totale;
         $limitePrelievoGiornaliero = $this->config->getLimitePrelievoGiornaliero();
         $logTransactions = $this->config->getLogTransactions();
-        if($totalePreleviOggi + $amount->cents() <= $limitePrelievoGiornaliero || !$logTransactions){
+        $minimoPrelievo = $this->config->getMinimoPrelievo();
+        $massimoPrelievo = $this->config->getMassimoPrelievo();
+
+        if($amountCents > $massimoPrelievo){
+            throw new \RuntimeException("Hai superato il limite massimo di prelievo!");
+        }
+
+        if($amountCents < $minimoPrelievo){
+            throw new \RuntimeException("Non hai superato il limite minimo di prelievo!");
+        }
+
+        if($totale <= $limitePrelievoGiornaliero || !$logTransactions){
             $customer->account()->withdraw($amount);
-
             $this->customers->save($customer);
-
             $this->logger->log(new Transaction(
             $this->newTransactionId(),
             $customerId,
@@ -103,7 +122,7 @@ final class BankTeller
 
         return $customer->account()->balance();
         }else{
-            throw New \InvalidArgumentException("Hai superato il limite giornaliero di prevlievo.");
+            throw New \RuntimeException("Hai superato il limite giornaliero di prevlievo.");
         }
     }
 

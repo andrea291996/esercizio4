@@ -48,7 +48,7 @@ final class Money
         // Regex per validazione dell'importo: numeri+virgola+numeri
         $regex = "/^[0-9]+(\.[0-9]{0,2})?$/";
         if (!preg_match($regex, $amount)) {
-            throw new \InvalidArgumentException("L'importo deve essere un numero maggiore o uguale a zero, intero o con un al massimo due cifre decimali\n");
+            throw new \InvalidArgumentException("L'importo deve essere un numero maggiore o uguale a 0.01 con un al massimo due cifre decimali\n");
             return new self(0);
         }
 
