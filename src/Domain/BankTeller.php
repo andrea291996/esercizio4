@@ -105,11 +105,18 @@ final class BankTeller
             throw new \RuntimeException("Hai superato il limite massimo di prelievo!");
         }
 
+        if($amountCents > $limitePrelievoGiornaliero){
+            throw new \RuntimeException("Hai superato il limite giornaliero di prevlievo.");
+        }
+
         if($amountCents < $minimoPrelievo){
             throw new \RuntimeException("Non hai superato il limite minimo di prelievo!");
         }
 
-        if($totale <= $limitePrelievoGiornaliero || !$logTransactions){
+        if($logTransactions){
+            $commissioneInt = $this->config->getCommissione();
+            $commissione = Money::fromCents($commissioneInt);
+            $amount = $amount->add($commissione);
             $customer->account()->withdraw($amount);
             $this->customers->save($customer);
             $this->logger->log(new Transaction(
@@ -120,10 +127,8 @@ final class BankTeller
             new \DateTimeImmutable('now')
         ));
 
-        return $customer->account()->balance();
-        }else{
-            throw New \RuntimeException("Hai superato il limite giornaliero di prevlievo.");
-        }
+        return $customer->account()->balance();}
+        
     }
 
     public function formatMoney(Money $money): string

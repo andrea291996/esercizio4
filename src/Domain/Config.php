@@ -12,8 +12,9 @@ class Config {
     private $limitePrelievoGiornaliero;
     private $minimoPrelievo;
     private $massimoPrelievo;
+    private $commissione;
 
-    public function __construct($currency, $logTransactions, $minimoDeposito, $massimoDeposito, $limitePrelievoGiornaliero, $minimoPrelievo, $massimoPrelievo){
+    public function __construct($currency, $logTransactions, $minimoDeposito, $massimoDeposito, $limitePrelievoGiornaliero, $minimoPrelievo, $massimoPrelievo, $commissione){
         $this->currency = $currency;
         $this->logTransactions = $logTransactions;
         $this->minimoDeposito = $minimoDeposito;
@@ -21,6 +22,7 @@ class Config {
         $this->limitePrelievoGiornaliero = $limitePrelievoGiornaliero;
         $this->minimoPrelievo = $minimoPrelievo;
         $this->massimoPrelievo = $massimoPrelievo;
+        $this->commissione = $commissione;
     }
 
     public function getLimitePrelievoGiornaliero(){
@@ -50,5 +52,10 @@ class Config {
     public function getMinimoPrelievo(){
         $minimoPrelievo = $this->minimoPrelievo;
         return (int)$minimoPrelievo;
+    }
+
+    public function getCommissione(){
+        $commissione = $this->commissione;
+        return (int)$commissione;
     }
 }

@@ -38,8 +38,9 @@ $massimoDeposito = $_ENV['MAX_DEPOSIT_CENTS'];
 $limitePrelievoGiornaliero = $_ENV['DAILY_WITHDRAW_LIMIT_CENTS'];
 $minimoPrelievo = $_ENV['MIN_WITHDRAW_CENTS'];
 $massimoPrelievo = $_ENV['MAX_WITHDRAW_CENTS'];
+$commissione = $_ENV['WITHDRAW_FEE_CENTS'];
 
-$config = new Config($currency, $logTransactions, $minimoDeposito, $massimoDeposito, $limitePrelievoGiornaliero, $minimoPrelievo, $massimoPrelievo);
+$config = new Config($currency, $logTransactions, $minimoDeposito, $massimoDeposito, $limitePrelievoGiornaliero, $minimoPrelievo, $massimoPrelievo, $commissione);
 
 $customersCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'customers_example.csv';
 $transactionsCsv = rtrim($dataDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'transactions_example.csv';
@@ -110,10 +111,11 @@ while (true) {
             case '4':
                 $id = ConsoleIO::readNonNegativeInt('Inserisci ID cliente: ');
                 $raw = ConsoleIO::readLine('Importo da prelevare (es. 10.50): ');
+                $customer = $bankTeller->getCustomer($id);
                 try{
                     $amount = Money::fromUserInput($raw);
                     $newBalance = $bankTeller->withdraw($id, $amount, $transactionRepo);
-                    ConsoleIO::println('Prelievo effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
+                    ConsoleIO::println('Prelievo effettuato. Importo prelevato: '.$bankTeller->formatMoney($amount).' Commissione: '.$bankTeller->formatMoney(Money::fromCents($config->getCommissione())).' Vecchio Saldo: ' . $bankTeller->formatMoney($customer->account()->balance()).' Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
                 }
                 catch(\Exception$e){
                     echo $e->getMessage();
