@@ -112,7 +112,7 @@ while (true) {
                 $raw = ConsoleIO::readLine('Importo da prelevare (es. 10.50): ');
                 try{
                     $amount = Money::fromUserInput($raw);
-                    $newBalance = $bankTeller->withdraw($id, $amount, $logTransactions, $transactionRepo);
+                    $newBalance = $bankTeller->withdraw($id, $amount, $transactionRepo);
                     ConsoleIO::println('Prelievo effettuato. Nuovo saldo: ' . $bankTeller->formatMoney($newBalance));
                 }
                 catch(\Exception$e){

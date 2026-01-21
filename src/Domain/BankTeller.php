@@ -25,7 +25,7 @@ final class BankTeller
     private CustomerRepository $customers;
     private TransactionLogger $logger;
     private string $currency;
-    private $config;
+    private Config $config;
 
     public function __construct(CustomerRepository $customers, TransactionLogger $logger, string $currency, Config $config)
     {
@@ -71,7 +71,7 @@ final class BankTeller
     /**
      * Ritiro.
      */
-    public function withdraw(int $customerId, Money $amount, $logTransactions, $transactionRepo): Money
+    public function withdraw(int $customerId, Money $amount, $transactionRepo): Money
     {
         $customer = $this->requireCustomer($customerId);
         $transazioniDiCustomer = $transactionRepo->getTransactionsByCustomerId($customerId);
@@ -87,6 +87,7 @@ final class BankTeller
         //echo "limite:" .$limitePrelievoGiornaliero;
         //echo "\nprelievo: ".$totale;
         $limitePrelievoGiornaliero = $this->config->getLimitePrelievoGiornaliero();
+        $logTransactions = $this->config->getLogTransactions();
         if($totalePreleviOggi + $amount->cents() <= $limitePrelievoGiornaliero || !$logTransactions){
             $customer->account()->withdraw($amount);
 

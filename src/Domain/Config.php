@@ -26,4 +26,8 @@ class Config {
     public function getLimitePrelievoGiornaliero(){
         return $this->limitePrelievoGiornaliero;
     }
+
+    public function getLogTransactions(){
+        return $this->logTransactions;
+    }
 }
