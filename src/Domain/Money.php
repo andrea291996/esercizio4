@@ -100,6 +100,11 @@ final class Money
         return $this->cents > $other->cents;
     }
 
+    public function lesserThan(self $other): bool
+    {
+        return $this->cents < $other->cents;
+    }
+    
     public function format(string $currency = 'EUR'): string
     {
         $euros = intdiv(abs($this->cents), 100);

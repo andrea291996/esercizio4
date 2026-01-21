@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 namespace App\Domain;
+use App\Domain\Money;
+
+//METTI A POSTO USANDO MONEY 
 
 class Config {
     private $currency;

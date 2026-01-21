@@ -50,6 +50,7 @@ final class BankTeller
      */
     public function deposit(int $customerId, Money $amount): Money
     {
+        //SISTEMA: DOVRESTI USARE LA CLASSE MONEY E LA SUA FUNZIONE GREATER THAN MAGARIC CREA LESSER THAN
         $customer = $this->requireCustomer($customerId);
         $minimoDeposito = $this->config->getMinimoDeposito();
         $massimoDeposito = $this->config->getMassimoDeposito();
