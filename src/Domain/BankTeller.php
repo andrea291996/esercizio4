@@ -55,7 +55,7 @@ final class BankTeller
         $minimoDeposito = $this->config->getMinimoDeposito();
         $massimoDeposito = $this->config->getMassimoDeposito();
         $amountCents = $amount->cents();
-        if($amountCents > $massimoDeposito){
+        if($amount->greaterThan($massimoDeposito)){
             throw new \RuntimeException("Hai superato il limite massimo di deposito!");
         }
         if($amountCents < $minimoDeposito){
@@ -133,8 +133,8 @@ final class BankTeller
     }
 
     public function transfer(int $idMittente, int $idDestinatario, Money $importo){
-        $mittente = $this->customers->findById($idMittente);
-        $destinatario = $this->customers->findById($idDestinatario);
+        $mittente = $this->requireCustomer($idMittente);
+        $destinatario = $this->requireCustomer($idDestinatario);
         if ($mittente === null) {
             throw new \RuntimeException('Mittente non trovato. ID: ' . $idMittente);
         }

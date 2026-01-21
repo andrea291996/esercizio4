@@ -11,7 +11,7 @@ class Config {
     private $currency;
     private $logTransactions;
     private $minimoDeposito;
-    private $massimoDeposito;
+    private Money $massimoDeposito;
     private $limitePrelievoGiornaliero;
     private $minimoPrelievo;
     private $massimoPrelievo;
@@ -21,7 +21,7 @@ class Config {
         $this->currency = $currency;
         $this->logTransactions = $logTransactions;
         $this->minimoDeposito = $minimoDeposito;
-        $this->massimoDeposito = $massimoDeposito;
+        $this->massimoDeposito = Money::fromCents((int)$massimoDeposito);
         $this->limitePrelievoGiornaliero = $limitePrelievoGiornaliero;
         $this->minimoPrelievo = $minimoPrelievo;
         $this->massimoPrelievo = $massimoPrelievo;
@@ -42,9 +42,9 @@ class Config {
         return (int)$minimoDeposito;
     }
 
-    public function getMassimoDeposito(){
-        $massimoDeposito = $this->massimoDeposito;
-        return (int)$massimoDeposito;
+    public function getMassimoDeposito():Money{
+        return $this->massimoDeposito;
+       
     }
 
     public function getMassimoPrelievo(){

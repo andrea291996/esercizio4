@@ -28,7 +28,7 @@ final class TransactionRepository
         }
     }
 
-    public function getTransactionsByCustomerId($customerId){
+    public function getTransactionsByCustomerId($customerId):array{
         $rows = $this->readRows();
         $transactions = [];
         foreach ($rows as $row) {
@@ -46,7 +46,7 @@ final class TransactionRepository
         $transactions = $this->getTransactionsByCustomerId($id);
         $transactions = array_slice($transactions, -$n);
         $transactions = array_reverse($transactions);
-        if(empty($transactios)){
+        if(empty($transactions)){
             throw new \RuntimeException('Nessuna transazione effettuata');
         }
         return $transactions;
