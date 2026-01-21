@@ -132,6 +132,41 @@ final class BankTeller
         
     }
 
+    public function transfer(int $idMittente, int $idDestinatario, Money $importo){
+        $mittente = $this->customers->findById($idMittente);
+        $destinatario = $this->customers->findById($idDestinatario);
+        if ($mittente === null) {
+            throw new \RuntimeException('Mittente non trovato. ID: ' . $idMittente);
+        }
+        if ($destinatario === null) {
+            throw new \RuntimeException('Mittente non trovato. ID: ' . $idDestinatario);
+        }
+
+        if ($destinatario == $mittente) {
+            throw new \RuntimeException('Mittente e Destinatario non possono coincidere');
+        }
+        $mittente->account()->withdraw($importo);
+        $destinatario->account()->deposit($importo);
+        $transactionId = $this->newTransactionId();
+        $this->customers->save($mittente);
+            $this->logger->log(new Transaction(
+            $transactionId,
+            $idMittente,
+            Transaction::TYPE_WITHDRAW,
+            $importo,
+            new \DateTimeImmutable('now')
+        ));
+        $this->customers->save($destinatario);
+            $this->logger->log(new Transaction(
+            $transactionId,
+            $idDestinatario,
+            Transaction::TYPE_DEPOSIT,
+            $importo,
+            new \DateTimeImmutable('now')
+        ));
+        return "L'operazione è andata a buon fine.";
+    }
+
     public function formatMoney(Money $money): string
     {
         return $money->format($this->currency);

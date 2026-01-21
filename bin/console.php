@@ -65,6 +65,7 @@ while (true) {
     ConsoleIO::println('  4) Preleva');
     ConsoleIO::println('  5) Crea nuovo cliente');
     ConsoleIO::println('  6) Estratto conto (ultime N transazioni)');
+    ConsoleIO::println('  7) Bonifico (da un cliente a un altro');
     ConsoleIO::println('  0) Esci');
 
     $choice = ConsoleIO::readLine('Scelta: ');
@@ -146,7 +147,18 @@ while (true) {
                     echo $e->getMessage();
                 }
                 break;
-
+            case '7':
+                $idMittente = ConsoleIO::readNonNegativeInt('Inserisci ID mittente: ');
+                $idDestinatario = ConsoleIO::readNonNegativeInt('Inserisci ID destinatario: ');
+                $raw = ConsoleIO::readLine('Importo da inviare: ');
+                try{
+                    $importo = Money::fromUserInput($raw);
+                    echo $bankTeller->transfer($idMittente, $idDestinatario, $importo);
+                }
+                catch(\Exception$e){
+                    echo $e->getMessage();
+                }
+                break;
             case '0':
                 ConsoleIO::println('Arrivederci!');
                 exit(0);

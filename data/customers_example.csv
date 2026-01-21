@@ -1,5 +1,5 @@
 id,name,balance_cents
-1,"Mario Rossi",130590
+1,"Mario Rossi",130540
 2,"Giulia Bianchi",1000005000
 3,"Ahmed El-Sayed",99999304800
 4,"Andrea Carminati",2987700
@@ -10,6 +10,6 @@ id,name,balance_cents
 9,joe,1234500
 10,joe,1234500
 11,jo,12543333300
-12,fhjek,335600
-13,blebla,99999900
-14,Andre,1050
+12,fhjek,235600
+13,blebla,99898000
+14,Andre,102950
